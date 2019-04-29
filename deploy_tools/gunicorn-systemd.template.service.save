@@ -1,0 +1,13 @@
+[Unit]
+Description=Gunicorn server for DOMAIN
+
+[Service]
+Restart=on-failure
+User=ht01
+WorkingDirectory=/home/ht01/sites/DOMAIN
+EnvironmentFile=/home/ht01/sites/DOMAIN/.env
+
+ExecStart=/home/ht01/sites/DOMAIN/virtualenv/bin/guni$
+
+[Install]
+WantedBy=multi-user.target
