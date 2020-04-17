@@ -1,6 +1,7 @@
 from django.core.exceptions import ValidationError
 from django.shortcuts import render, redirect
 from lists.models import Item, List
+from lists.forms import ItemForm
 
 # Create your views here.
 def home_page(request):
@@ -8,7 +9,7 @@ def home_page(request):
         list_ = List.objects.create()
         Item.objects.create(text=request.POST['item_text'], list=list_)
         return redirect('/lists/the-only-list-in-the-world/')
-    return render(request, 'home.html')
+    return render(request, 'home.html', {'form': ItemForm()})
 
 def view_list(request, list_id):
     list_ = List.objects.get(id=list_id)
