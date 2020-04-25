@@ -1,25 +1,41 @@
-from django.core.exceptions import ValidationError
+from django.views.generic import FormView, CreateView, DetailView
+#from django.core.exceptions import ValidationError
 from django.shortcuts import render, redirect
 from lists.models import Item, List
 from lists.forms import ItemForm, ExistingListItemForm
 
 # Create your views here.
-def home_page(request):
-    if request.method == 'POST':
-        list_ = List.objects.create()
-        Item.objects.create(text=request.POST['text'], list=list_)
-        return redirect('/lists/the-only-list-in-the-world/')
-    return render(request, 'home.html', {'form': ItemForm()})
+class HomePageView(FormView):
+    template_name = 'home.html'
+    form_class = ItemForm
 
-def view_list(request, list_id):
-    list_ = List.objects.get(id=list_id)
-    form = ExistingListItemForm(for_list=list_)
-    if request.method == 'POST':
-        form = ExistingListItemForm(for_list=list_, data=request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect(list_)
-    return render(request, 'list.html', {'list': list_, "form": form})
+class NewListView(CreateView):
+    template_name = 'home.html'
+    form_class = ItemForm
+
+    def form_valid(self, form):
+        list_ = List.objects.create()
+        form.save(for_list=list_)
+        return redirect(list_)
+
+class ViewAddToList(DetailView, CreateView):
+    model = List
+    template_name = 'list.html'
+    form_class = ExistingListItemForm
+
+    def get_form(self):
+        self.object = self.get_object()
+        return self.form_class(for_list=self.object, data=self.request.POST)
+
+# def view_list(request, list_id):
+#     list_ = List.objects.get(id=list_id)
+#     form = ExistingListItemForm(for_list=list_)
+#     if request.method == 'POST':
+#         form = ExistingListItemForm(for_list=list_, data=request.POST)
+#         if form.is_valid():
+#             form.save()
+#             return redirect(list_)
+#     return render(request, 'list.html', {'list': list_, "form": form})
 
 def new_list(request):
     form = ItemForm(data=request.POST)
