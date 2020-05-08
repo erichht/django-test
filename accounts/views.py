@@ -14,7 +14,7 @@ def send_login_email(request):
     print('saving uid', uid, 'for email', email, file=sys.stderr)
     url = request.build_absolute_uri(f'/accounts/login?uid={uid}')
     send_mail(
-        'Your login link for python-test',
+        'Your login link for Python-test',
         f'Use this link to log in:\n\n{url}',
         'noreply@python-test',
         [email],
