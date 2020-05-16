@@ -4,10 +4,6 @@ from django.contrib.auth.models import (
 )
 
 # Create your models here.
-class Token(models.Model):
-    email = models.EmailField()
-    uid = models.CharField(max_length=255)
-
 class ListUserManager(BaseUserManager):
 
     def create_user(self, email):
@@ -29,3 +25,7 @@ class ListUser(AbstractBaseUser, PermissionsMixin):
     @property
     def is_active(self):
         return True
+
+class Token(models.Model):
+    email = models.EmailField()
+    uid = models.CharField(max_length=255)

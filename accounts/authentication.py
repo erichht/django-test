@@ -18,4 +18,4 @@ class PasswordlessAuthenticationBackend(object):
             return ListUser.objects.create(email=token.email)
     
     def get_user(self, email):
-        return ListUser.objects.create(email=email)
+        return ListUser.objects.get(email=email)
